@@ -133,9 +133,16 @@ for (const htmlPath of htmlFiles) {
   if (updated !== original) fs.writeFileSync(htmlPath, updated);
 }
 
-// 5) Root index redirect
+// 5) Root index: avoid JS/redirect loops on GitHub Pages.
+// Prefer making /index.html identical to /<basePathStripped>/index.html.
 const rootIndex = path.join(outDir, 'index.html');
-const rootHtml = `<!doctype html>\n<html>\n  <head>\n    <meta http-equiv="refresh" content="0; url=${basePath}/" />\n    <link rel="canonical" href="${basePath}/" />\n  </head>\n  <body>\n    Redirecting to <a href="${basePath}/">${basePath}/</a>\n  </body>\n</html>\n`;
-fs.writeFileSync(rootIndex, rootHtml);
+const sourceRootIndex = path.join(outBaseDir, 'index.html');
+if (fs.existsSync(sourceRootIndex)) {
+  fs.copyFileSync(sourceRootIndex, rootIndex);
+} else {
+  // Fallback: single static link (no auto-redirect).
+  const rootHtml = `<!doctype html>\n<html>\n  <head>\n    <meta charset="utf-8" />\n    <title>Redirecting...</title>\n  </head>\n  <body>\n    <a href="${basePath}/">Go to site</a>\n  </body>\n</html>\n`;
+  fs.writeFileSync(rootIndex, rootHtml);
+}
 
 console.log(`Prepared GitHub Pages export in: ${outDir}`);
