@@ -6,6 +6,24 @@ First, run the development server:
 
 ```bash
 npm run dev
+
+## Deploying to GitHub Pages (static export)
+
+1. Create a new GitHub repository (or use your existing one) and push this project.
+2. Ensure the default branch is `main` (or change the workflow branch trigger).
+3. On GitHub, enable GitHub Pages:
+   - Settings → Pages → Build and deployment → Source: GitHub Actions
+4. The workflow in `.github/workflows/deploy-gh-pages.yml` will run on every push to `main`.
+5. After the first successful run, your site will be published from the `gh-pages` branch.
+
+Local verification:
+
+```bash
+npm run build
+npx next export -o out
+```
+
+The exported static site is written to `out/`.
 # or
 yarn dev
 # or
