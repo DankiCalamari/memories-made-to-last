@@ -6,8 +6,11 @@ const nextConfig: NextConfig = {
   output: 'export',
   trailingSlash: true,
 
-  // Asset paths must be absolute for `next/font`.
-  assetPrefix: '/',
+  // GitHub Pages often serves the site from a project sub-path.
+  // Ensure Next-generated absolute assets (like /_next/...) point
+  // at the correct base path on GitHub Pages.
+  basePath: '/memories-made-to-last',
+  assetPrefix: '/memories-made-to-last',
 
   // `output: 'export'` + route segment configs can conflict with
   // component caching. Keep the build/export path reliable for Pages.
